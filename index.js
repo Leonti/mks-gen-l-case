@@ -31,7 +31,7 @@ const fanHoles = union(
 
 const boxX = 142
 const boxY = 100
-const boxZ = 22
+const boxZ = 22 // 47 min
 const wallWidth = 2
 
 const usbHole = cube({size: [11, wallWidth, 9]})
