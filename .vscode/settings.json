@@ -1,3 +1,13 @@
 {
-  "python.pythonPath": "/usr/bin/python"
+  "python.pythonPath": "/usr/local/opt/python/bin/python3.7",
+  "saveAndRun": {
+    "commands": [
+      {
+        "match": "\\.py$",
+        "cmd": "python ${file}",
+        "useShortcut": false,
+        "silent": false
+      }
+    ]
+  }
 }

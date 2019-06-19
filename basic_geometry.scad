@@ -1,26 +1,23 @@
 $fn = 48;
 
 union() {
-	union() {
-		translate(v = [-15, 0, 0]) {
-			cube(center = true, size = [10, 5, 3]);
+	difference() {
+		linear_extrude(height = 2) {
+			polygon(paths = [[0, 1, 2, 3]], points = [[0, 0], [0, 130], [25, 130], [25, 0]]);
 		}
-		translate(v = [-10, 0, 0]) {
-			difference() {
-				cylinder(center = true, h = 15, r = 5);
-				cylinder(center = true, h = 16, r = 4);
+		union() {
+			translate(v = [12, 10, -1]) {
+				cylinder(h = 4, r = 2.9000000000);
+			}
+			translate(v = [15, 123, -1]) {
+				cylinder(h = 4, r = 2.9000000000);
 			}
 		}
 	}
-	union() {
-		translate(v = [15, 0, 0]) {
-			cube(center = true, size = [10, 5, 3]);
-		}
-		translate(v = [10, 0, 0]) {
-			difference() {
-				cylinder(center = true, h = 15, r = 5);
-				cylinder(center = true, h = 16, r = 4);
-			}
+	difference() {
+		cube(size = [20, 15, 15]);
+		translate(v = [-1, 2, 2]) {
+			cube(size = [22, 11, 11]);
 		}
 	}
 }
@@ -39,41 +36,28 @@ from solid.utils import *
 
 SEGMENTS = 48
 
+def holder():
+    return cube(size=[20, 15, 15]) - (translate([-1, 2, 2])(cube(size=[22, 11, 11])))
 
-def basic_geometry():
-    # SolidPython code can look a lot like OpenSCAD code.  It also has
-    # some syntactic sugar built in that can make it look more pythonic.
-    # Here are two identical pieces of geometry, one left and one right.
+def stand_base():
+    height = 130
+    width = 25
+    return polygon(points = [[0, 0], [0, height], [width, height], [width, 0]])
 
-    # left_piece uses standard OpenSCAD grammar (note the commas between
-    # block elements; OpenSCAD doesn't require this)
-    left_piece =  union()(
-                        translate([-15, 0, 0])(
-                            cube([10, 5, 3], center=True)
-                        ),
-                        translate([-10, 0, 0])(
-                            difference()(
-                                cylinder(r=5, h=15, center=True),
-                                cylinder(r=4, h=16, center=True)
-                            )
-                        )
-                    )
-    
-    # Right piece uses a more Pythonic grammar.  + (plus) is equivalent to union(), 
-    # - (minus) is equivalent to difference() and * (star) is equivalent to intersection
-    # solid.utils also defines up(), down(), left(), right(), forward(), and back()
-    # for common transforms.
-    right_piece = right(15)(cube([10, 5, 3], center=True))
-    cyl = cylinder(r=5, h=15, center=True) - cylinder(r=4, h=16, center=True)
-    right_piece += right(10)(cyl)
-
-    return union()(left_piece, right_piece)
+def extruded_base():
+    shape = stand_base()
+    extruded = linear_extrude(height = 2)(shape)
+    screw_hole = cylinder(r=2.9, h=4)
+    hole_distance = 113
+    screw_holes = translate([12,10,-1])(screw_hole) + translate([15,10 + hole_distance, -1])(screw_hole)
+    holders = holder()
+    return (extruded - screw_holes) + holders
 
 if __name__ == '__main__':
     out_dir = sys.argv[1] if len(sys.argv) > 1 else os.curdir
     file_out = os.path.join(out_dir, 'basic_geometry.scad')
 
-    a = basic_geometry()
+    a = extruded_base()
 
     print("%(__file__)s: SCAD file written to: \n%(file_out)s" % vars())
 
