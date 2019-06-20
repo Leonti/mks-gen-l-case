@@ -85,7 +85,7 @@ def extruded_base():
 
 if __name__ == '__main__':
     out_dir = sys.argv[1] if len(sys.argv) > 1 else os.curdir
-    file_out = os.path.join(out_dir, 'basic_geometry.scad')
+    file_out = os.path.join(out_dir, 'stand.scad')
 
     a = extruded_base()
 
