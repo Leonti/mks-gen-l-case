@@ -10,7 +10,13 @@ from solid.utils import *
 SEGMENTS = 48
 
 def holder():
-    return cube(size=[20, 15, 15]) - (translate([-1, 2, 2])(cube(size=[22, 11, 11])))
+    holder_x = 40
+    holder_y = 15
+    holder_z = 15
+    upper_hole = translate([30, holder_y/2, holder_z - 3])(cylinder(d=2.9, h=4))
+    bottom_hole = translate([30, holder_y/2, -1 ])(cylinder(d=7, h=4))
+    holder_base = cube(size=[holder_x, holder_y, holder_z]) - (translate([-1, 2, 2])(cube(size=[holder_x + 2, holder_y - 4, holder_z - 4])))
+    return holder_base - upper_hole - bottom_hole
 
 def stand_base():
     height = 130
@@ -20,10 +26,10 @@ def stand_base():
 def extruded_base():
     shape = stand_base()
     extruded = linear_extrude(height = 2)(shape)
-    screw_hole = cylinder(r=2.9, h=4)
+    screw_hole = cylinder(d=2.9, h=4)
     hole_distance = 113
     screw_holes = translate([12,10,-1])(screw_hole) + translate([15,10 + hole_distance, -1])(screw_hole)
-    holders = holder()
+    holders = translate([0, 30, 0])(holder()) + translate([0, 80, 0])(holder())
     return (extruded - screw_holes) + holders
 
 if __name__ == '__main__':
