@@ -39,12 +39,14 @@ wall_width = 2
 usb_hole = cube(size = [11, wall_width + 2, 9])
 stepper_hole = cube(size = [15, 7, wall_width + 2])
 power_hole = rotate([0, -90, 0])(cylinder(d=8, h=wall_width + 2))
+chamber_hole = cube(size = [90, 65, wall_width + 2])
 
 holes = (
   translate([30.1 + stand_diameter/2, 2.7 + stand_diameter / 2, 0])(stand_holes) +
   translate([30.1 + 22.2, -1, wall_width + stand_height + 2])(usb_hole) +
   translate([45, box_y - wall_width - 7, -1])(stepper_hole) +
   translate([85, box_y - wall_width - 7, -1])(stepper_hole) +
+  translate([40, 12, -1])(chamber_hole) +
   translate([wall_width + 1, 10, wall_width + stand_height + 2])(power_hole) +
   translate([wall_width + 1, 20, wall_width + stand_height + 2])(power_hole) +
   translate([wall_width + 1, 15, wall_width + stand_height + 10])(power_hole) +
