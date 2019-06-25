@@ -27,17 +27,13 @@ difference() {
 	}
 	union() {
 		translate(v = [33.8500000000, 6.4500000000, 0]) {
-			translate(v = [0, 0, -1]) {
-				cylinder(d = 2.8000000000, h = 10);
+			rotate(a = [-90, 0, 0]) {
+				cylinder(d = 2.9000000000, h = 4);
 			}
-			translate(v = [0, 76, -1]) {
-				cylinder(d = 2.8000000000, h = 10);
-			}
-			translate(v = [102, 76, -1]) {
-				cylinder(d = 2.8000000000, h = 10);
-			}
-			translate(v = [102, 0, -1]) {
-				cylinder(d = 2.8000000000, h = 10);
+			translate(v = [52, 0, 0]) {
+				rotate(a = [-90, 0, 0]) {
+					cylinder(d = 2.9000000000, h = 4);
+				}
 			}
 		}
 		translate(v = [52.3000000000, -1, 7]) {
@@ -76,6 +72,16 @@ difference() {
 			}
 		}
 	}
+	translate(v = [24, -1, 10]) {
+		rotate(a = [-90, 0, 0]) {
+			cylinder(d = 2.9000000000, h = 4);
+		}
+		translate(v = [52, 0, 0]) {
+			rotate(a = [-90, 0, 0]) {
+				cylinder(d = 2.9000000000, h = 4);
+			}
+		}
+	}
 }
 /***********************************************
 *********      SolidPython code:      **********
@@ -109,6 +115,12 @@ stand_holes = (
   translate([102, 0, -1])(cylinder(d=2.8, h=10)) 
 )
 
+stand_hole = rotate([-90, 0, 0])(cylinder(d=2.9, h=4))
+stand_holes = (
+  stand_hole,
+  translate([52, 0, 0])(stand_hole)
+)
+
 fan_holes = (
   translate([0, 0, 0])(cylinder(d=2.8, h=10)),
   translate([0, 50, 0])(cylinder(d=2.8, h=10))
@@ -133,7 +145,8 @@ holes = (
   translate([wall_width + 1, 10, wall_width + stand_height + 2])(power_hole) +
   translate([wall_width + 1, 20, wall_width + stand_height + 2])(power_hole) +
   translate([wall_width + 1, 15, wall_width + stand_height + 10])(power_hole) +
-  translate([13, 40, -1])(fan_holes)
+  translate([13, 40, -1])(fan_holes),
+  translate([24, -1, 10])(stand_holes)
 )
 
 box_base = cube(size = [box_x, box_y, box_z]) - translate([wall_width, wall_width, wall_width])( 

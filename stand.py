@@ -29,7 +29,7 @@ def extruded_base():
     screw_hole = cylinder(d=2.9, h=4)
     hole_distance = 113
     screw_holes = translate([12,10,-1])(screw_hole) + translate([15,10 + hole_distance, -1])(screw_hole)
-    holders = translate([0, 30, 0])(holder()) + translate([0, 80, 0])(holder())
+    holders = translate([0, 28, 0])(holder()) + translate([0, 80, 0])(holder())
     return (extruded - screw_holes) + holders
 
 if __name__ == '__main__':
