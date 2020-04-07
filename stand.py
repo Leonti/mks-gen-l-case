@@ -12,7 +12,7 @@ SEGMENTS = 48
 def holder():
     holder_x = 40
     holder_y = 15
-    holder_z = 15
+    holder_z = 22
     upper_hole = translate([30, holder_y/2, holder_z - 3])(cylinder(d=2.9, h=4))
     bottom_hole = translate([30, holder_y/2, -1 ])(cylinder(d=7, h=4))
     holder_base = cube(size=[holder_x, holder_y, holder_z]) - (translate([-1, 2, 2])(cube(size=[holder_x + 2, holder_y - 4, holder_z - 4])))
@@ -29,7 +29,7 @@ def extruded_base():
     screw_hole = cylinder(d=2.9, h=4)
     hole_distance = 113
     screw_holes = translate([12,10,-1])(screw_hole) + translate([15,10 + hole_distance, -1])(screw_hole)
-    holders = translate([0, 28, 0])(holder()) + translate([0, 80, 0])(holder())
+    holders = translate([0, 28, 0])(holder()) + translate([0, 96, 0])(holder())
     return (extruded - screw_holes) + holders
 
 if __name__ == '__main__':
