@@ -28,50 +28,51 @@ lcd_holes = (
     translate([31.25, 10, -1])(cylinder(d=12, h=10))
 )
 
-sd_card_slot = cube(size=[15, 2, 4])
+LCD_PCB_WIDTH = 70
+LCD_PCB_HEIGHT = 75
 
-card_width = 29
-card_depth = 19
-card_connector_hole = cube(size=[5.5, 20, 13.5])
-card_fence_height = 3.5
-sd_card_holder = (
-    cube(size=[card_width + 4, 2, card_depth + 2]) + 
-    translate([0, 2, 0])(cube(size=[2, card_fence_height, card_depth + 2])) +
-    translate([card_width + 2, 2, 0])(cube(size=[2, card_fence_height, card_depth + 2])) +
-    translate([2, 2, card_depth])(cube(size=[card_width, card_fence_height, 2])) -
-    translate([4, -15, 2.2])(card_connector_hole)
+lcd_pcb = color("green")(
+    cube([LCD_PCB_WIDTH, LCD_PCB_HEIGHT, 16])
+    + translate([25,58,16])(cube([20, 10, 16]))
+    + translate([(LCD_PCB_WIDTH - lcd_hole_distance_x)/2, (LCD_PCB_HEIGHT - lcd_hole_distance_y)/2,-3])(lcd_holes) 
+    )
+
+base_plate_dim_x = LCD_PCB_WIDTH + 4
+base_plate_dim_y = LCD_PCB_HEIGHT + 4 + 11
+
+side = rotate([90,0,90])(linear_extrude(height=2)(
+    polygon([[0,0],[LCD_PCB_WIDTH + 20, 0],[LCD_PCB_WIDTH + 20,35],[20,35]])
+    ))
+
+skirt = cube([base_plate_dim_x + 10, 50, 4])
+back_box = (
+    cube([base_plate_dim_x, base_plate_dim_y, 35])
+    + translate([-5, 2, -2])(rotate([60,0,0])(skirt))
+    - translate([2,2,0])(cube([base_plate_dim_x - 4, base_plate_dim_y - 4, 38]))
+    )
+
+cut_box = translate([-10, 0, -2])(
+    rotate([60,0,0])(cube([base_plate_dim_x + 20, 100, 100]))
 )
 
-sd_card_hole = (
-    cube(size=[card_width, 7, 2]) +
-    translate([12,3.5,-2])(cube(size=[12, 2, 3]))
-)
-
-base_plate_dim_x = 90
-base_plate_dim_y = 100
-
-card_holder_x = 10
-card_holder_y = 5
-base_plate_test = (
-    cube(size=[base_plate_dim_x, base_plate_dim_y, 2])+
-    translate([card_holder_x, card_holder_y, 1])(sd_card_holder) -
-    translate([card_holder_x + 2, card_holder_y + 2, 1])(sd_card_hole) -
-    translate([(base_plate_dim_x - lcd_hole_distance_x)/2, 20, 0])(lcd_holes)
-)
+cut_box_front = translate([-10,0,-20])(cube([base_plate_dim_x + 20, 100, 20]))
 
 base_plate = (
-    cube(size=[80, 80, 2]) - 
-    translate([5, 5, -1])(lcd_holes) -
-    translate([20, 25, -1])(lcd_window) -
-    translate([30, 15, -1])(sd_card_slot) +
-    translate([28, 13, 2])(sd_card_holder)
+    cube(size=[base_plate_dim_x, base_plate_dim_y, 2])
+     - translate([2,13,2])(lcd_pcb)
+     + translate([0,0,0])(back_box)
+     - cut_box
+     - translate([-10,0,-20])(cube([base_plate_dim_x + 20, 100, 20]))
+     - translate([-10,0,35])(cube([base_plate_dim_x + 20, 100, 20]))
+#    + translate([0,0,2])(side)
+#    + translate([base_plate_dim_x - 2,0,2])(side)
 )
 
 if __name__ == '__main__':
     out_dir = sys.argv[1] if len(sys.argv) > 1 else os.curdir
     file_out = os.path.join(out_dir, 'front_plate.scad')
 
-    a = base_plate_test
+    a = base_plate
 
     print("%(__file__)s: SCAD file written to: \n%(file_out)s" % vars())
 
